@@ -14,18 +14,30 @@ public class Address {
 
     public final String value;
     private boolean isPrivate;
+    public final String[] addressComponents;
+    public final Block block;
+    public final Street street;
+    public final Unit unit;
+    public final PostalCode postalCode;
 
     /**
      * Validates given address.
      *
      * @throws IllegalValueException if given address string is invalid.
      */
+ 
     public Address(String address, boolean isPrivate) throws IllegalValueException {
         this.isPrivate = isPrivate;
         if (!isValidAddress(address)) {
             throw new IllegalValueException(MESSAGE_ADDRESS_CONSTRAINTS);
         }
         this.value = address;
+        this.addressComponents= address.trim().split(",");
+        
+        block = new Block(addressComponents[0], isPrivate);
+        street = new Street(addressComponents[1], isPrivate);
+        unit = new Unit(addressComponents[2], isPrivate);
+        postalCode = new PostalCode(addressComponents[3], isPrivate);
     }
 
     /**
@@ -55,4 +67,5 @@ public class Address {
     public boolean isPrivate() {
         return isPrivate;
     }
+   
 }
