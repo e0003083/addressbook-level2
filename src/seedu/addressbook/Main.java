@@ -32,12 +32,13 @@ public class Main {
     private List<? extends ReadOnlyPerson> lastShownList = Collections.emptyList();
 
 
-    public static void main(String... launchArgs) {
+    public static void main(String... launchArgs) throws NoStorageFileException {
         new Main().run(launchArgs);
     }
 
-    /** Runs the program until termination.  */
-    public void run(String[] launchArgs) {
+    /** Runs the program until termination.  
+     * @throws NoStorageFileException */
+    public void run(String[] launchArgs) throws NoStorageFileException {
         start(launchArgs);
         runCommandLoopUntilExitCommand();
         exit();
@@ -77,8 +78,9 @@ public class Main {
         System.exit(0);
     }
 
-    /** Reads the user command and executes it, until the user issues the exit command.  */
-    private void runCommandLoopUntilExitCommand() {
+    /** Reads the user command and executes it, until the user issues the exit command.  
+     * @throws NoStorageFileException */
+    private void runCommandLoopUntilExitCommand() throws NoStorageFileException {
         Command command;
         do {
             String userCommandText = ui.getUserCommand();
