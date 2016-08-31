@@ -5,6 +5,7 @@ import seedu.addressbook.storage.StorageFile.*;
 
 import seedu.addressbook.commands.*;
 import seedu.addressbook.data.AddressBook;
+import seedu.addressbook.data.exception.NoStorageFileException;
 import seedu.addressbook.parser.Parser;
 import seedu.addressbook.storage.StorageFile;
 import seedu.addressbook.ui.TextUi;
@@ -31,12 +32,13 @@ public class Main {
     private List<? extends ReadOnlyPerson> lastShownList = Collections.emptyList();
 
 
-    public static void main(String... launchArgs) {
+    public static void main(String... launchArgs) throws NoStorageFileException {
         new Main().run(launchArgs);
     }
 
-    /** Runs the program until termination.  */
-    public void run(String[] launchArgs) {
+    /** Runs the program until termination.  
+     * @throws NoStorageFileException */
+    public void run(String[] launchArgs) throws NoStorageFileException {
         start(launchArgs);
         runCommandLoopUntilExitCommand();
         exit();
@@ -76,8 +78,9 @@ public class Main {
         System.exit(0);
     }
 
-    /** Reads the user command and executes it, until the user issues the exit command.  */
-    private void runCommandLoopUntilExitCommand() {
+    /** Reads the user command and executes it, until the user issues the exit command.  
+     * @throws NoStorageFileException */
+    private void runCommandLoopUntilExitCommand() throws NoStorageFileException {
         Command command;
         do {
             String userCommandText = ui.getUserCommand();
@@ -103,7 +106,9 @@ public class Main {
      * @param command user command
      * @return result of the command
      */
-    private CommandResult executeCommand(Command command)  {
+    private CommandResult executeCommand(Command command) throws NoStorageFileException  {
+    	if (storage.getPath().equals(null))
+    		throw new NoStorageFileException("Error: Storage file missing. Please restart program.");
         try {
             command.setData(addressBook, lastShownList);
             CommandResult result = command.execute();
