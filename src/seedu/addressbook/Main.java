@@ -5,6 +5,7 @@ import seedu.addressbook.storage.StorageFile.*;
 
 import seedu.addressbook.commands.*;
 import seedu.addressbook.data.AddressBook;
+import seedu.addressbook.data.exception.NoStorageFileException;
 import seedu.addressbook.parser.Parser;
 import seedu.addressbook.storage.StorageFile;
 import seedu.addressbook.ui.TextUi;
@@ -103,7 +104,9 @@ public class Main {
      * @param command user command
      * @return result of the command
      */
-    private CommandResult executeCommand(Command command)  {
+    private CommandResult executeCommand(Command command) throws NoStorageFileException  {
+    	if (storage.getPath().equals(null))
+    		throw new NoStorageFileException("Error: Storage file deleted. Please restart program.");
         try {
             command.setData(addressBook, lastShownList);
             CommandResult result = command.execute();
